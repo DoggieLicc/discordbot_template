@@ -9,7 +9,7 @@ except:
 import discord, json, time
 from discord.ext import commands
 
-TOKEN = "ODEyMTQwNzEyODAzODI3NzQy.YC8a-g.XXCr0HKfine-x_I7zu6Sb59ySHk"
+TOKEN = ""
 
 def get_prefix(client, message):
     if isinstance(message.channel, discord.channel.DMChannel):
