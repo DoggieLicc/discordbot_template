@@ -1,4 +1,5 @@
 {
   "help":"Displays this!",
+  "info":"Displays information about the bot!",
   "setprefix {prefix}":"Sets custom prefix for this server!"
 }
