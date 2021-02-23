@@ -15,14 +15,18 @@ Example:
 ```python
 await embed_send(ctx, "Hello There!", "This is an embed!", color=0xefefef)
 ```
-### "setprefix" command
+### "setprefix" command ("prefix" alias)
 This command will set a custom prefix that will be used for the server, the default prefix is "$"
 To check the set prefix, ping  the bot.
 **NOTE: This command can only be triggered by users with the "Manage Server" permission in discord, and can't be used in DMs**
 
-### "help" command
+### "help" command ("h" alias)
 This command will display all commands that are in json/commands.json
-Refer to the json file for examples on how to list commands correctly
+
+
+### "info" command ("ping" alias)
+This command displays information about the bot, it displays bot uptime and ping.
+
 ### Error handling
 General discord errors that may happen:
 * Command Not Found: Tells the user that the command doesn't exist.
