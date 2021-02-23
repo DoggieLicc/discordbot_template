@@ -1,4 +1,3 @@
-
 import os, sys, time
 
 try:
@@ -8,6 +7,7 @@ except:
 
 import discord, json, time
 from discord.ext import commands
+
 
 TOKEN = ""
 
@@ -21,6 +21,9 @@ def get_prefix(client, message):
 client = commands.Bot(command_prefix=get_prefix)
 
 client.remove_command("help")
+
+def get_uptime():
+    return round(time.time() - startTime)
 
 @client.event
 async def on_command_error(ctx, error):
@@ -62,40 +65,29 @@ async def on_guild_remove(guild):
 
 @client.event
 async def on_ready():
+    global startTime
     await client.change_presence(activity=discord.Game(name="Hello world!"))
     print("Ready!\n")
+    startTime = time.time()
 
 
 @client.event
 async def on_message(message):
     if client.user.mentioned_in(message):
-        if isinstance(message.channel, discord.channel.DMChannel):
-            embed = discord.Embed(
-                title="Pinged!",
-                description="The set prefix is $",
-                color=0xFFFFFE,
-            )
-            await message.channel.send(embed=embed)
-            return
         try:
-            embed = discord.Embed(
-                title="Pinged!",
-                description="The set prefix is {}".format(get_prefix(client,
-                message)),
-                color=0xFFFFFE,
-            )
+            get_prefix(client, message)
         except:
             with open("json/prefixes.json", "r") as f:
                 prefixes = json.load(f)
             prefixes[str(message.guild.id)] = "$"
             with open("json/prefixes.json", "w") as f:
                 json.dump(prefixes, f, indent=2)
-            embed = discord.Embed(
-                title="Pinged!",
-                description="The set prefix is {}".format(get_prefix(client,
-                message)),
-                color=0xFFFFFE,
-            )
+        embed = discord.Embed(
+            title="Pinged!",
+            description="The set prefix is {}".format(get_prefix(client,
+            message)),
+            color=0xFFFFFE,
+        )
         embed.set_footer(
             text="Command sent by {}".format(message.author),
             icon_url=message.author.avatar_url,
@@ -111,7 +103,7 @@ async def on_message(message):
             json.dump(prefixes, f, indent=2)
         await client.process_commands(message)
 
-@client.command()
+@client.command(aliases=["prefix"])
 @commands.guild_only()
 @commands.has_permissions(manage_guild=True)
 async def setprefix(ctx, prefix):
@@ -137,7 +129,7 @@ async def embed_send(ctx, title, description, color=0xFFFFFE):
     await ctx.send(embed=embed)
 
 
-@client.command()
+@client.command(aliases=["h"])
 async def help(ctx):
     embed = discord.Embed(title="Help:", color=0x00FF40)
     with open("json/commands.json", "r") as f:
@@ -149,6 +141,21 @@ async def help(ctx):
         text="Command sent by {}".format(ctx.author),
         icon_url=ctx.author.avatar_url,
     )
+    await ctx.send(embed=embed)
+
+@client.command(aliases=["ping"])
+async def info(ctx):
+    embed=discord.Embed(title='Info', color=0x00FF40)
+    embed.add_field(name='Bot Creator:',
+        value=\
+        '[DoggieLicc](https://github.com/DoggieLicc/discord.py_templates)',
+        inline=Fals
+    embed.add_field(name='Bot Uptime:',
+        value='{} seconds'.format(get_uptime()), inline=False)
+    embed.add_field(name='Ping:',
+        value='{} ms'.format(round(1000*(client.latency)), inline=False))
+    embed.set_footer(text="Command sent by {}".format(ctx.message.author),
+        icon_url=ctx.message.author.avatar_url)
     await ctx.send(embed=embed)
 
 try:
