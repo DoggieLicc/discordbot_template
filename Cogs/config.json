@@ -1,0 +1,6 @@
+{
+  "BOT_TOKEN": "token here",
+  "DEFAULT_PREFIX": ".",
+  "MEMBER_INTENTS": false,
+  "PRESENCE_INTENTS": false
+}
